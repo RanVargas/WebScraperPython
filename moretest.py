@@ -27,11 +27,32 @@ def getAllHoyLinksMain():
     
     return filterer(SecondLinkHold)
 
-  
-receiveds = getAllHoyLinksMain()
-for itemm in receiveds:
-    print(itemm)
- 
+def GetLinksRecursive(LinksInFirstResult, limiterr):
+    limiterr += 1
+    newHtml = ""
+    FinalLinksContainer = []
+    for actualLink in LinksInFirstResult:
+        try:
+            newHtml = urlopen(f"{actualLink}")  
+            bsObjsnew = BeautifulSoup(newHtml, "html.parser")
+            
+        except:
+          continue
+        
+        for linkin in bsObjsnew.find_all("aside", {"id": "masrecientes"}):
+             linkinAs = linkin.findall("a")
+             for a in linkinAs:
+                 if a.attrs['href'] not in LinksInFirstResult:
+                       FinalLinksContainer.append(a.attrs['href'])
+    if limiterr == 1000:
+          return FinalLinksContainer
+      
+    return FinalLinksContainer
+
+
+hipo = 0
+firstresult = getAllHoyLinksMain()
+GetLinksRecursive(firstresult, hipo)
 #print(len(SecondLinkHold))
-#print(len(terminated))
+#print(firstresult)
  
