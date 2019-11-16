@@ -29,6 +29,7 @@ def getAllHoyLinksMain():
 
 def GetLinksRecursive(LinksInFirstResult, limiterr):
     limiterr += 1
+    shower = 0
     newHtml = ""
     FinalLinksContainer = []
     for actualLink in LinksInFirstResult:
@@ -40,19 +41,31 @@ def GetLinksRecursive(LinksInFirstResult, limiterr):
           continue
         
         for linkin in bsObjsnew.find_all("aside", {"id": "masrecientes"}):
-             linkinAs = linkin.findall("a")
-             for a in linkinAs:
-                 if a.attrs['href'] not in LinksInFirstResult:
-                       FinalLinksContainer.append(a.attrs['href'])
-    if limiterr == 1000:
+             shower+= 1
+             AFinders = linkin.findAll("a")
+             try:
+               for a in AFinders:
+                 hond = a.attrs['href']
+                 if (hond not in FinalLinksContainer) and (hond not in LinksInFirstResult):
+                       FinalLinksContainer.append(hond)
+                 
+             except:
+               print(shower, "broken")
+               continue
+             
+             
+    if limiterr == 40:
           return FinalLinksContainer
+    
       
     return FinalLinksContainer
 
 
 hipo = 0
 firstresult = getAllHoyLinksMain()
-GetLinksRecursive(firstresult, hipo)
+secondresult = GetLinksRecursive(firstresult, hipo)
+print(len(firstresult), "primero no recursivo")
+print(len(secondresult), "segundo recursivo")
 #print(len(SecondLinkHold))
 #print(firstresult)
  
