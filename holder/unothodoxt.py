@@ -9,6 +9,7 @@ def filterer(givenn):
             newlist.append(i)
     return newlist
 
+
 def getAllHoyLinksMain():
     html = urlopen("https://hoy.com.do/")
     bsObj = BeautifulSoup(html, "html.parser")
