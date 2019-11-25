@@ -2,6 +2,8 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
   
+  
+#Para llamar a la pagina principal, provisto a ser eliminada
 def filterer(givenn):
     newlist = []
     for i in givenn:
@@ -27,9 +29,9 @@ def getAllHoyLinksMain():
     
     return filterer(SecondLinkHold)
 
-def GetLinksRecursive(LinksInFirstResult, limiterr):
-    limiterr += 1
-    shower = 0
+#Obtener todos los articulos anidados en la lista de articulos proveida
+def GetLinksRecursive(LinksInFirstResult):
+    
     newHtml = ""
     FinalLinksContainer = []
     for actualLink in LinksInFirstResult:
@@ -41,7 +43,7 @@ def GetLinksRecursive(LinksInFirstResult, limiterr):
           continue
         
         for linkin in bsObjsnew.find_all("aside", {"id": "masrecientes"}):
-             shower+= 1
+             
              AFinders = linkin.findAll("a")
              try:
                for a in AFinders:
@@ -50,22 +52,30 @@ def GetLinksRecursive(LinksInFirstResult, limiterr):
                        FinalLinksContainer.append(hond)
                  
              except:
-               print(shower, "broken")
                continue
-             
-             
-    if limiterr == 40:
-          return FinalLinksContainer
-    
-      
+          
     return FinalLinksContainer
 
 
-hipo = 0
+#Obtener todos los articulos, pero en su reespectiva categoria.
+def GetLinksOfEditorial():
+    html = urlopen("https://hoy.com.do/opiniones/")
+    ResultingLinks = []
+    bsObj = BeautifulSoup(html, "html.parser")
+    for link in bsObj.find_all("div", {"class": re.compile("(.*article-content)(.*)")}):
+        Afinder = link.find_all("a")
+        for a in Afinder:
+            poiner = a.attrs['href']
+            if poiner not in ResultingLinks:
+                ResultingLinks.append(poiner)
+    return ResultingLinks
+
+
+print(GetLinksOfEditorial())
 firstresult = getAllHoyLinksMain()
-secondresult = GetLinksRecursive(firstresult, hipo)
-print(len(firstresult), "primero no recursivo")
-print(len(secondresult), "segundo recursivo")
+secondresult = GetLinksRecursive(firstresult)
+#print(len(firstresult), "primero no recursivo")
+#print(len(secondresult), "segundo recursivo")
 #print(len(SecondLinkHold))
 #print(firstresult)
  
