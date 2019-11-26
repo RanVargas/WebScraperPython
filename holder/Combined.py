@@ -8,8 +8,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from moretest import GetLinksOfOpinion, GetLinksOfElHoy
 
-from moretest import GetLinksOfOpiniones
 
 class Ui_SearchWindow(object):
     comboOptionHolder = ''
@@ -90,6 +90,7 @@ class Ui_SearchWindow(object):
         if self.ElHoyLabel == election:
            if election.isChecked() == True:
                 self.CategoryComboBox.clear()
+                self.ResultOfSearchListBox.clear()
                 CategoryOptions = ["Opinion", "El Pais", "Economia", "Deportes", "EL Mundo", "Vivir", "Alegria"]
                 self.CategoryComboBox.addItems(CategoryOptions)
         
@@ -97,6 +98,7 @@ class Ui_SearchWindow(object):
         if self.ListinDiarioLabel == election:
             if election.isChecked() == True:
                 self.CategoryComboBox.clear()
+                self.ResultOfSearchListBox.clear()
                 CategoryOptions = ["Republica", "Opinion", "Deportes", "Mundiales", "Entretenimiento", "Vida", "Economia"]
                 self.CategoryComboBox.addItems(CategoryOptions)
         
@@ -104,6 +106,7 @@ class Ui_SearchWindow(object):
         if self.DiarioLibreLabel == election:
             if election.isChecked() == True:
                 self.CategoryComboBox.clear()
+                self.ResultOfSearchListBox.clear()
                 CategoryOptions = ["Actualidad", "Economia", "Revista", "Deportes", "Estilos", "Opinion"]
                 self.CategoryComboBox.addItems(CategoryOptions)
 
@@ -111,17 +114,76 @@ class Ui_SearchWindow(object):
         self.comboOptionHolder = self.CategoryComboBox.itemData(index)
 
     def TrigeredSearch(self):
-        if self.comboOptionHolder != False:
-            
-            if self.ElHoyLabel.isChecked == True:
-                if self.comboOptionHolder == "Opinion":
-                    ResultS = GetLinksOfOpiniones()
-                    self.ResultOfSearchListBox.addItems(ResultS)
-             
-            if self.ElHoyLabel.isChecked == True:
+        if self.ElHoyLabel.isChecked() == True:
+                CategoryOptions = ["Opinion", "El Pais", "Economia", "Deportes", "EL Mundo", "Vivir", "Alegria"]
+                #Opiniones
+                if self.CategoryComboBox.currentText() == CategoryOptions[0]:
+                    ResultN = []
+                    ResultS = GetLinksOfOpinion()
+                    for name in ResultS:
+                        ResultN.append(name[1])
+                    self.ResultOfSearchListBox.clear()
+                    self.ResultOfSearchListBox.addItems(ResultN)
+                
+                #El Pais
+                if self.CategoryComboBox.currentText() == CategoryOptions[1]:
+                      ResultN = []
+                      ResultS = GetLinksOfElHoy(1)
+                      for name in ResultS:
+                          ResultN.append(name[1])
+                      self.ResultOfSearchListBox.clear()
+                      self.ResultOfSearchListBox.addItems(ResultN)
+                
+                #Economia
+                if self.CategoryComboBox.currentText() == CategoryOptions[2]:
+                      ResultN = []
+                      ResultS = GetLinksOfElHoy(2)
+                      for name in ResultS:
+                          ResultN.append(name[1])
+                      self.ResultOfSearchListBox.clear()
+                      self.ResultOfSearchListBox.addItems(ResultN)
+                
+                #Deportes
+                if self.CategoryComboBox.currentText() == CategoryOptions[3]:
+                      ResultN = []
+                      ResultS = GetLinksOfElHoy(3)
+                      for name in ResultS:
+                          ResultN.append(name[1])
+                      self.ResultOfSearchListBox.clear()
+                      self.ResultOfSearchListBox.addItems(ResultN)
+                
+                #El Mundo
+                if self.CategoryComboBox.currentText() == CategoryOptions[4]:
+                      ResultN = []
+                      ResultS = GetLinksOfElHoy(4)
+                      for name in ResultS:
+                          ResultN.append(name[1])
+                      self.ResultOfSearchListBox.clear()
+                      self.ResultOfSearchListBox.addItems(ResultN)
+                
+                #Vivir
+                if self.CategoryComboBox.currentText() == CategoryOptions[5]:
+                      ResultN = []
+                      ResultS = GetLinksOfElHoy(5)
+                      for name in ResultS:
+                          ResultN.append(name[1])
+                      self.ResultOfSearchListBox.clear()
+                      self.ResultOfSearchListBox.addItems(ResultN)
+                
+                #Alegria
+                if self.CategoryComboBox.currentText() == CategoryOptions[6]:
+                      ResultN = []
+                      ResultS = GetLinksOfElHoy(6)
+                      for name in ResultS:
+                          ResultN.append(name[1])
+                      self.ResultOfSearchListBox.clear()
+                      self.ResultOfSearchListBox.addItems(ResultN)
+                
+                
+        if self.ElHoyLabel.isChecked() == True:
                 pass       
             
-            if self.ListinDiarioLabel.isChecked == True:
+        if self.ListinDiarioLabel.isChecked() == True:
                 pass
 
     def retranslateUi(self, SearchWindow):
