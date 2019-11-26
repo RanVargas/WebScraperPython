@@ -9,9 +9,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from moretest import GetLinksOfEditorial
+from moretest import GetLinksOfOpiniones
 
 class Ui_SearchWindow(object):
+    comboOptionHolder = ''
     def setupUi(self, SearchWindow):
         SearchWindow.setObjectName("SearchWindow")
         SearchWindow.resize(480, 640)
@@ -30,12 +31,14 @@ class Ui_SearchWindow(object):
         font.setPointSize(12)
         self.DiarioLibreLabel.setFont(font)
         self.DiarioLibreLabel.setObjectName("DiarioLibreLabel")
+        self.DiarioLibreLabel.toggled.connect(lambda:self.RadioButtonElections(self.DiarioLibreLabel))
         self.ListinDiarioLabel = QtWidgets.QRadioButton(self.centralwidget)
         self.ListinDiarioLabel.setGeometry(QtCore.QRect(50, 80, 121, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.ListinDiarioLabel.setFont(font)
         self.ListinDiarioLabel.setObjectName("ListinDiarioLabel")
+        self.ListinDiarioLabel.toggled.connect(lambda:self.RadioButtonElections(self.ListinDiarioLabel))
         self.CategoryComboBox = QtWidgets.QComboBox(self.centralwidget)
         self.CategoryComboBox.setGeometry(QtCore.QRect(210, 50, 121, 23))
         self.CategoryComboBox.setObjectName("CategoryComboBox")
@@ -60,6 +63,7 @@ class Ui_SearchWindow(object):
         font.setPointSize(12)
         self.SearchBtn.setFont(font)
         self.SearchBtn.setObjectName("SearchBtn")
+        self.SearchBtn.clicked.connect(self.TrigeredSearch)
         self.DownloadBtn = QtWidgets.QPushButton(self.centralwidget)
         self.DownloadBtn.setGeometry(QtCore.QRect(180, 560, 91, 23))
         font = QtGui.QFont()
@@ -81,20 +85,44 @@ class Ui_SearchWindow(object):
         QtCore.QMetaObject.connectSlotsByName(SearchWindow)
 
     def RadioButtonElections(self, election):
+        
         #ElHoy
-        if election.isChecked() == True:
-            Result = GetLinksOfEditorial()
-            for item in Result:
-                self.ResultOfSearchListBox.addItem(item[1])
+        if self.ElHoyLabel == election:
+           if election.isChecked() == True:
+                self.CategoryComboBox.clear()
+                CategoryOptions = ["Opinion", "El Pais", "Economia", "Deportes", "EL Mundo", "Vivir", "Alegria"]
+                self.CategoryComboBox.addItems(CategoryOptions)
         
         #ListinDiario
-        if election.isChecked() == True:
-            pass
+        if self.ListinDiarioLabel == election:
+            if election.isChecked() == True:
+                self.CategoryComboBox.clear()
+                CategoryOptions = ["Republica", "Opinion", "Deportes", "Mundiales", "Entretenimiento", "Vida", "Economia"]
+                self.CategoryComboBox.addItems(CategoryOptions)
         
         #DiarioLibre
-        if election.isChecked() == True:
-            pass
+        if self.DiarioLibreLabel == election:
+            if election.isChecked() == True:
+                self.CategoryComboBox.clear()
+                CategoryOptions = ["Actualidad", "Economia", "Revista", "Deportes", "Estilos", "Opinion"]
+                self.CategoryComboBox.addItems(CategoryOptions)
 
+    def ComboOptionsPicked(self, index):
+        self.comboOptionHolder = self.CategoryComboBox.itemData(index)
+
+    def TrigeredSearch(self):
+        if self.comboOptionHolder != False:
+            
+            if self.ElHoyLabel.isChecked == True:
+                if self.comboOptionHolder == "Opinion":
+                    ResultS = GetLinksOfOpiniones()
+                    self.ResultOfSearchListBox.addItems(ResultS)
+             
+            if self.ElHoyLabel.isChecked == True:
+                pass       
+            
+            if self.ListinDiarioLabel.isChecked == True:
+                pass
 
     def retranslateUi(self, SearchWindow):
         _translate = QtCore.QCoreApplication.translate

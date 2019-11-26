@@ -56,9 +56,19 @@ def GetLinksRecursive(LinksInFirstResult):
           
     return FinalLinksContainer
 
+#Obtener el titulo de los resultados
+def TitledName(Links):
+    ResultList = []
+    for link in Links:
+        html = urlopen(f"{link}")
+        bsObj = BeautifulSoup(html, "html.parser")
+        h1title = bsObj.find("h1").get_text()
+        ResultList.append([f"{link}",f"{h1title}"])
+    return ResultList
+
 
 #Obtener todos los articulos, pero en su reespectiva categoria.
-def GetLinksOfEditorial():
+def GetLinksOfOpiniones():
     html = urlopen("https://hoy.com.do/opiniones/")
     ResultingLinks = []
     bsObj = BeautifulSoup(html, "html.parser")
@@ -68,12 +78,13 @@ def GetLinksOfEditorial():
             poiner = a.attrs['href']
             if poiner not in ResultingLinks:
                 ResultingLinks.append(poiner)
-    return ResultingLinks
+    finalresult = TitledName(ResultingLinks)
+    return finalresult
 
 
-print(GetLinksOfEditorial())
-firstresult = getAllHoyLinksMain()
-secondresult = GetLinksRecursive(firstresult)
+#print(GetLinksOfEditorial())
+#firstresult = getAllHoyLinksMain()
+#secondresult = GetLinksRecursive(firstresult)
 #print(len(firstresult), "primero no recursivo")
 #print(len(secondresult), "segundo recursivo")
 #print(len(SecondLinkHold))
