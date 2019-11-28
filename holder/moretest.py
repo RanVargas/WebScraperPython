@@ -1,6 +1,7 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
+import requests
   
   
 #Para llamar a la pagina principal, provisto a ser eliminada
@@ -166,7 +167,9 @@ def GetLinksOfElHoy(option):
 
     
 
-#print(GetLinksOfEditorial())
+
+
+
 #firstresult = getAllHoyLinksMain()
 #secondresult = GetLinksRecursive(firstresult)
 #print(len(firstresult), "primero no recursivo")
