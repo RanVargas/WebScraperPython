@@ -1,7 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
-import asyncio
 
 #Categorias a elegir CategoryOptions = ["Republica", "Opinion", "Deportes", "Mundiales", "Entretenimiento", "Vida", "Economia"]
 
@@ -16,7 +15,6 @@ def GetRepublicaLinks():
                 ResultS.append(WholeLink)
     return ResultS
     
-    
 def GetOpinionLinks():
     ResultS = []
     htmllink = urlopen('https://listindiario.com/opinion')
@@ -28,7 +26,7 @@ def GetOpinionLinks():
                   ResultS.append(WholeLink)
     return ResultS
     
-async def GetDeporteLinks():
+def GetDeporteLinks():
     ResultS = []
     htmllink = urlopen('https://listindiario.com/el-deporte')
     bsObj = BeautifulSoup(htmllink, "html.parser")
@@ -36,7 +34,7 @@ async def GetDeporteLinks():
         if 'href' in link.attrs:
             WholeLink = "https://listindiario.com" + f"{link.attrs['href']}"
             if WholeLink not in ResultS:
-                await ResultS.append(WholeLink)
+                ResultS.append(WholeLink)
     return ResultS    
 
 def GetMundialesLinks():
@@ -107,8 +105,7 @@ def GetListinDiarioLinks(Election):
     elif Election == 2:
         Deportes = GetDeporteLinks()
         result = Cleaner(Deportes)
-        taks = asyncio.create_task(Deportes)
-        return taks
+        return result
     
     elif Election == 3:
         Mundiales = GetMundialesLinks()
@@ -131,8 +128,3 @@ def GetListinDiarioLinks(Election):
         return result
     
     
-    
-    
-
-
-print(GetListinDiarioLinks(2))
