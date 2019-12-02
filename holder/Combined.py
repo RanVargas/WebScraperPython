@@ -11,8 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from HoyRefined import GetLinksOfElHoy
 from ListinDiarioRefined import GetListinDiarioLinks
 from DiarioLibreRefined import GetDiarioLibreLinks
-from downloadArticles import mainDownloader
-from DbHandler import WriteDownload
+from downloadArticles import mainDownloader, DeleteHtmlFile
+from DbHandler import WriteDownload, ReadDownload, DeleteDownload, Closer
+from invocateBrowser import invoke
 
 class Ui_SearchWindow(object):
     SearchListResult = []
@@ -345,11 +346,11 @@ class Ui_SearchWindow(object):
                             downloadedPath = mainDownloader(link[0])
                             WriteDownload( link[1], downloadedPath)
                         
-                        elif self.ListinDiarioLabel.isChecked:
+                        elif self.ListinDiarioLabel.isChecked():
                             downloadedPath = mainDownloader(link[0])
                             WriteDownload(link[1], downloadedPath)
                         
-                        elif self.DiarioLibreLabel.isChecked:
+                        elif self.DiarioLibreLabel.isChecked():
                             downloadedPath = mainDownloader(link[0])
                             WriteDownload(link[1], downloadedPath)
         
@@ -371,23 +372,28 @@ class Ui_DownloadedWindow(object):
     def setupUi(self, DownloadedWindow):
         DownloadedWindow.setObjectName("DownloadedWindow")
         DownloadedWindow.resize(630, 514)
+        
         self.centralwidget = QtWidgets.QWidget(DownloadedWindow)
         self.centralwidget.setObjectName("centralwidget")
-        self.DownloadedArticlesListView = QtWidgets.QListView(self.centralwidget)
+        #QtWidgets.QListWidget
+        self.DownloadedArticlesListView = QtWidgets.QListWidget(self.centralwidget)
         self.DownloadedArticlesListView.setGeometry(QtCore.QRect(10, 20, 521, 461))
         self.DownloadedArticlesListView.setObjectName("DownloadedArticlesListView")
+        
         self.OpenBtn = QtWidgets.QPushButton(self.centralwidget)
         self.OpenBtn.setGeometry(QtCore.QRect(540, 160, 80, 71))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.OpenBtn.setFont(font)
         self.OpenBtn.setObjectName("OpenBtn")
+        self.OpenBtn.clicked.connect(self.OpenArtile)
         self.DeleteBtn = QtWidgets.QPushButton(self.centralwidget)
         self.DeleteBtn.setGeometry(QtCore.QRect(540, 280, 80, 71))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.DeleteBtn.setFont(font)
         self.DeleteBtn.setObjectName("DeleteBtn")
+        self.DeleteBtn.clicked.connect(self.DeleteArticle)
         self.GoBackBtn = QtWidgets.QPushButton(self.centralwidget)
         self.GoBackBtn.setGeometry(QtCore.QRect(540, 442, 80, 41))
         font = QtGui.QFont()
@@ -403,6 +409,35 @@ class Ui_DownloadedWindow(object):
         self.retranslateUi(DownloadedWindow)
         QtCore.QMetaObject.connectSlotsByName(DownloadedWindow)
 
+    def OpenArtile(self):
+        ListData = ReadDownload()
+        
+        if len(self.DownloadedArticlesListView.selectedIndexes()) <= 0:
+            for item in ListData:
+                self.DownloadedArticlesListView.addItem(item[1])
+            Closer()
+        if len(self.DownloadedArticlesListView.selectedIndexes()) > 0:
+            listOfItems = self.DownloadedArticlesListView.selectedItems()
+            for item in listOfItems:
+                for row in ListData:
+                    if item.text() == row[1]:
+                        invoke(row[2])
+
+    def DeleteArticle(self):
+        ListData = ReadDownload()
+        Closer()
+        if len(self.DownloadedArticlesListView.selectedIndexes()) > 0:
+            listOfItems = self.DownloadedArticlesListView.selectedItems()
+            for item in listOfItems:
+                for row in ListData:
+                    if item.text() == row[1]:
+                        #Aqui va una funcion que tome como argumento el path del archivo. Preferiblemente que sea lo mismo de la db. Para borrarlo de la db y de el directorio
+                        DeleteHtmlFile(row[2])
+                        DeleteDownload(row[2])
+                        newListData = ReadDownload()
+                        for newItem in newListData:
+                            self.DownloadedArticlesListView.addItem(newItem[1])
+            Closer()
 
     def retranslateUi(self, DownloadedWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -461,6 +496,7 @@ def ChangeWindow(presentW, futureW):
     presentW.hide()
     futureW.show()
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
@@ -472,6 +508,7 @@ if __name__ == "__main__":
     MainUi.setupUi(MainWindow)
     DownloadedSUi = Ui_DownloadedWindow()
     DownloadedSUi.setupUi(DownloadedWindow)
+    
     SearchUi = Ui_SearchWindow()
     SearchUi.setupUi(SearchWindow)
     DownloadedSUi.GoBackBtn.clicked.connect(lambda: ChangeWindow(DownloadedWindow, MainWindow))
