@@ -147,7 +147,7 @@ def potaraFunction(list1,list2):
   return list1
 
 
-articlesRevista =retrieveTittlesRevista()
+articlesRevista = retrieveTittlesRevista()
 articlesEconomia = retrieveTittlesEconomia()
 articlesActualidad = retrieveTittlesActualidad()
 #FULLLIST CONTIENE TOODO

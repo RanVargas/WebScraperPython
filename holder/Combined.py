@@ -8,12 +8,14 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from moretest import GetLinksOfElHoy
+from HoyRefined import GetLinksOfElHoy
 from ListinDiarioRefined import GetListinDiarioLinks
 from DiarioLibreRefined import GetDiarioLibreLinks
+from downloadArticles import mainDownloader
+from DbHandler import WriteDownload
 
 class Ui_SearchWindow(object):
-    comboOptionHolder = ''
+    SearchListResult = []
     def setupUi(self, SearchWindow):
         SearchWindow.setObjectName("SearchWindow")
         SearchWindow.resize(480, 640)
@@ -127,6 +129,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[0]:
                     ResultN = []
                     ResultS = GetLinksOfElHoy(0)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                         ResultN.append(name[1])
                     self.ResultOfSearchListBox.clear()
@@ -136,6 +139,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[1]:
                       ResultN = []
                       ResultS = GetLinksOfElHoy(1)
+                      self.SearchListResult = ResultS
                       for name in ResultS:
                           ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -145,6 +149,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[2]:
                       ResultN = []
                       ResultS = GetLinksOfElHoy(2)
+                      self.SearchListResult = ResultS
                       for name in ResultS:
                           ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -154,6 +159,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[3]:
                       ResultN = []
                       ResultS = GetLinksOfElHoy(3)
+                      self.SearchListResult = ResultS
                       for name in ResultS:
                           ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -163,6 +169,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[4]:
                       ResultN = []
                       ResultS = GetLinksOfElHoy(4)
+                      self.SearchListResult = ResultS
                       for name in ResultS:
                           ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -172,6 +179,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[5]:
                       ResultN = []
                       ResultS = GetLinksOfElHoy(5)
+                      self.SearchListResult = ResultS
                       for name in ResultS:
                           ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -193,6 +201,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[0]:
                     ResultN = []
                     ResultS = GetDiarioLibreLinks(0)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -202,6 +211,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[1]:
                     ResultN = []
                     ResultS = GetDiarioLibreLinks(1)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -211,6 +221,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[2]:
                     ResultN = []
                     ResultS = GetDiarioLibreLinks(2)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -220,6 +231,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[3]:
                     ResultN = []
                     ResultS = GetDiarioLibreLinks(3)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -229,6 +241,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[4]:
                     ResultN = []
                     ResultS = GetDiarioLibreLinks(4)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -238,6 +251,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[5]:
                     ResultN = []
                     ResultS = GetDiarioLibreLinks(5)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -250,6 +264,7 @@ class Ui_SearchWindow(object):
                 if self.CategoryComboBox.currentText() == CategoryOptions[0]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(0)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -259,6 +274,7 @@ class Ui_SearchWindow(object):
                 elif self.CategoryComboBox.currentText() == CategoryOptions[1]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(1)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -268,6 +284,7 @@ class Ui_SearchWindow(object):
                 elif self.CategoryComboBox.currentText() == CategoryOptions[2]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(2)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -277,6 +294,7 @@ class Ui_SearchWindow(object):
                 elif self.CategoryComboBox.currentText() == CategoryOptions[3]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(3)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -286,6 +304,7 @@ class Ui_SearchWindow(object):
                 elif self.CategoryComboBox.currentText() == CategoryOptions[4]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(3)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -295,6 +314,7 @@ class Ui_SearchWindow(object):
                 elif self.CategoryComboBox.currentText() == CategoryOptions[5]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(4)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -304,6 +324,7 @@ class Ui_SearchWindow(object):
                 elif self.CategoryComboBox.currentText() == CategoryOptions[6]:
                     ResultN = []
                     ResultS = GetListinDiarioLinks(5)
+                    self.SearchListResult = ResultS
                     for name in ResultS:
                       ResultN.append(name[1])
                       self.ResultOfSearchListBox.clear()
@@ -311,12 +332,26 @@ class Ui_SearchWindow(object):
 
     def DownloadTriggered(self):
         if len(self.ResultOfSearchListBox.selectedIndexes()) > 0:
-            listOfItems = self.ResultOfSearchListBox.items
+            listOfItems = self.ResultOfSearchListBox.selectedItems()
+            #self.CategoryComboBox.clear()
             for item in listOfItems:
-                for selected in self.ResultOfSearchListBox.selectedItems:
-                    if item == selected:
-                        self.CategoryComboBox.clear()
-                        self.CategoryComboBox.addItem(item)
+                #holdingIndex = self.ResultOfSearchListBox.currentRow()
+                #holdingText = self.ResultOfSearchListBox.currentItem().text()
+                #self.CategoryComboBox.addItem(item.text())
+                for link in self.SearchListResult:
+                    if link[1] == item.text():
+                        #self.CategoryComboBox.addItem(item.text())
+                        if self.ElHoyLabel.isChecked():
+                            downloadedPath = mainDownloader(link[0])
+                            WriteDownload( link[1], downloadedPath)
+                        
+                        elif self.ListinDiarioLabel.isChecked:
+                            downloadedPath = mainDownloader(link[0])
+                            WriteDownload(link[1], downloadedPath)
+                        
+                        elif self.DiarioLibreLabel.isChecked:
+                            downloadedPath = mainDownloader(link[0])
+                            WriteDownload(link[1], downloadedPath)
         
     def retranslateUi(self, SearchWindow):
         _translate = QtCore.QCoreApplication.translate
